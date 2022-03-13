@@ -1,11 +1,11 @@
-package com.desinta.dogsmvvmtrial.data.adapter
+package net.dogs.data.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.desinta.dogsmvvmtrial.data.local.Dog
-import com.desinta.dogsmvvmtrial.databinding.ItemDogBinding
+import net.dogs.data.local.Dog
+import net.dogs.databinding.ItemDogBinding
 
 class PicturesAdapter(
     private val dogs: List<Dog>

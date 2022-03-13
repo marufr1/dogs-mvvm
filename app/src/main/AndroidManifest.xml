@@ -12,14 +12,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Dogs">
         <activity
-            android:name=".DetailDog"
-            android:exported="false" />
-        <activity
-            android:name=".MainActivity"
-            android:exported="false" />
-        <activity
             android:name=".ui.PicturesActivity"
-            android:exported="true">
+            android:exported="false" />
+        <activity
+            android:name=".SplashActivity"
+            android:exported="true"
+            android:theme="@style/Theme.Dogs.Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

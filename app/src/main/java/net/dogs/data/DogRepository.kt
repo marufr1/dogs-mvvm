@@ -7,42 +7,25 @@ import kotlinx.coroutines.withContext
 import net.dogs.data.local.Dog
 import net.dogs.data.local.DogsDatabase
 import net.dogs.data.model.SearchResponse
-import net.dogs.data.model.SearchResponseItem
 import net.dogs.data.network.ApiClient
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 class DogRepository(context: Context) {
 
     private val retrofit = ApiClient.instance
     private val database = DogsDatabase.getInstance(context)
 
-    suspend fun getDogs() {
-        withContext(CoroutineScope(Dispatchers.IO).coroutineContext) {
-            retrofit.searchImages(size = "small", hasBreeds = true, limit = 20)
-                .enqueue(object : Callback<SearchResponse> {
-                    override fun onResponse(
-                        call: Call<SearchResponse>,
-                        response: Response<SearchResponse>
-                    ) {
-                        if (response.code() == 200) {
-                            val dogs = response.body()!!
-                            if (dogs.isEmpty()) {
-                                println("Tidak ada data anjing di server")
-                            } else {
-                                ArrayList<SearchResponseItem>(dogs)
-                            }
-                        } else {
-                            println("Masalah koneksi ke server ${response.code()}")
-                        }
-                    }
+    suspend fun getDogs(): SearchResponse? {
 
-                    override fun onFailure(call: Call<SearchResponse>, t: Throwable) {
-                        println(t.message.toString())
-                    }
-                })
+        var response: SearchResponse?
+
+        withContext(CoroutineScope(Dispatchers.IO).coroutineContext) {
+            response = try {
+                retrofit.searchImages(size = "small", hasBreeds = true, limit = 5).body()
+            } catch (e: Exception) {
+                null
+            }
         }
+        return response
     }
 
     suspend fun saveDogs(searchResponse: SearchResponse): Boolean {
@@ -53,8 +36,8 @@ class DogRepository(context: Context) {
                     null,
                     it.id,
                     it.url,
-                    it.breeds.elementAt(3).toString(),
-                    it.breeds.elementAt(4).toString()
+                    "null",
+                    "null"
                 )
             }
             successInsert = try {

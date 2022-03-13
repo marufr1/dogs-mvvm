@@ -1,11 +1,10 @@
-package com.desinta.dogsmvvmtrial.ui
+package net.dogs.ui
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.desinta.dogsmvvmtrial.data.DogRepository
-import com.desinta.dogsmvvmtrial.data.local.Dog
-import com.desinta.dogsmvvmtrial.data.model.SearchResponse
+import net.dogs.data.DogRepository
+import net.dogs.data.local.Dog
 
 class PicturesViewModel(private val repository: DogRepository) : ViewModel() {
 

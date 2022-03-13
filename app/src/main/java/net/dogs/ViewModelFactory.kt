@@ -8,7 +8,9 @@ class ViewModelFactory(private val repository: DogRepository) : ViewModelProvide
 
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         try {
-            return super.create(modelClass)
+            return modelClass.getDeclaredConstructor(
+                DogRepository::class.java
+            ).newInstance(repository) as T
         } catch (e: Exception) {
             throw IllegalArgumentException("Unknown ViewModel class: " + modelClass.name)
         }

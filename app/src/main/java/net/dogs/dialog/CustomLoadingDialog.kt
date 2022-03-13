@@ -1,4 +1,4 @@
-package com.desinta.dogsmvvmtrial.dialog
+package net.dogs.dialog
 
 import android.app.Dialog
 import android.content.Context
@@ -6,7 +6,7 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.view.Window
 import android.view.WindowManager
-import com.desinta.dogsmvvmtrial.R
+import net.dogs.R
 
 class CustomLoadingDialog(context: Context) : Dialog(context) {
 

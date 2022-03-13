@@ -1,4 +1,4 @@
-package com.desinta.dogsmvvmtrial.ui
+package net.dogs.ui
 
 interface PicturesView {
 

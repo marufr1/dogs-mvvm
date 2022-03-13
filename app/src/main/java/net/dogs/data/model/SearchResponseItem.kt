@@ -2,7 +2,6 @@ package net.dogs.data.model
 
 
 import com.google.gson.annotations.SerializedName
-import net.dogs.data.model.Breed
 
 data class SearchResponseItem(
     @SerializedName("breeds")

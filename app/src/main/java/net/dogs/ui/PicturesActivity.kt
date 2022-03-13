@@ -1,18 +1,19 @@
-package com.desinta.dogsmvvmtrial.ui
+package net.dogs.ui
 
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
-import com.desinta.dogsmvvmtrial.ViewModelFactory
-import com.desinta.dogsmvvmtrial.data.DogRepository
-import com.desinta.dogsmvvmtrial.data.adapter.PicturesAdapter
-import com.desinta.dogsmvvmtrial.databinding.ActivityPicturesBinding
-import com.desinta.dogsmvvmtrial.dialog.CustomLoadingDialog
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import net.dogs.ViewModelFactory
+import net.dogs.data.DogRepository
+import net.dogs.data.adapter.PicturesAdapter
+import net.dogs.data.local.DogsDatabase
+import net.dogs.databinding.ActivityPicturesBinding
+import net.dogs.dialog.CustomLoadingDialog
 
 class PicturesActivity : AppCompatActivity(), PicturesView {
 
@@ -44,6 +45,11 @@ class PicturesActivity : AppCompatActivity(), PicturesView {
                 this.adapter = PicturesAdapter(it)
             }
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        DogsDatabase.destroyInstance()
     }
 
     override fun showLoading() {
