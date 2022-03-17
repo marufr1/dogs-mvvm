@@ -19,7 +19,7 @@ class PicturesViewModel(private val repository: DogRepository) : ViewModel() {
         val result = repository.getDogs()
         result?.let {
             // if data not null, save or replace to table dogs
-            repository.saveDogs(result)
+            repository.saveDogs(it)
         }
 
         // get latest data dogs from local db

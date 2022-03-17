@@ -36,12 +36,12 @@ class DogRepository(context: Context) {
                     null,
                     it.id,
                     it.url,
-                    "null",
-                    "null"
+                    it.breeds.elementAt(0).name,
+                    it.breeds.elementAt(0).bredFor
                 )
             }
             successInsert = try {
-                database?.dog()?.insertDog(dogs)
+                database!!.dog().insertDog(dogs)
                 true
             } catch (e: Exception) {
                 false
