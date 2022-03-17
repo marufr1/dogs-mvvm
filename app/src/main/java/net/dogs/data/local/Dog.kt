@@ -12,6 +12,6 @@ data class Dog(
     @PrimaryKey(autoGenerate = true) var id: Long?,
     @ColumnInfo(name = "image_id") var imageId: String,
     @ColumnInfo(name = "url") var url: String,
-    @ColumnInfo var name: String,
+    @ColumnInfo(name = "name") var name: String,
     @ColumnInfo(name = "bred_for") var bredFor: String
 ) : Parcelable

@@ -23,7 +23,7 @@ abstract class DogsDatabase : RoomDatabase() {
                     ).build()
                 }
             }
-            return database
+            return database!!
         }
 
         fun destroyInstance() {
