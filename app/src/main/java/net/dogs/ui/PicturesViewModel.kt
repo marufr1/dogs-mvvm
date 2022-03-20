@@ -3,28 +3,44 @@ package net.dogs.ui
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import net.dogs.data.DogRepository
 import net.dogs.data.local.Dog
+import javax.inject.Inject
 
-class PicturesViewModel(private val repository: DogRepository) : ViewModel() {
-
-    var view: PicturesView? = null
+@HiltViewModel
+class PicturesViewModel @Inject constructor(
+    private val repository: DogRepository,
+    private val ioDispatcher: CoroutineDispatcher
+    ) : ViewModel() {
 
     private val _dogs = MutableLiveData<List<Dog>>()
     val dogs: LiveData<List<Dog>> = _dogs
+    private val _loading = MutableLiveData(false)
+    val loading: LiveData<Boolean> = _loading
+    private val _message: MutableLiveData<String> = MutableLiveData()
+    val message: LiveData<String> = _message
 
     suspend fun fetchAndLoadDog() {
-        view?.showLoading()
-        // fetch data from API
-        val result = repository.getDogs()
-        result?.let {
-            // if data not null, save or replace to table dogs
-            repository.saveDogs(it)
+        viewModelScope.launch(ioDispatcher) {
+            repository.getDogs(
+                onStart = { _loading.postValue(true) },
+                onComplete = { _loading.postValue(false) },
+                onError = { _message.postValue(it) }
+            ).collect {
+                val textString = it
+                    .joinToString(separator = ":")
+                    .substring(0, 100)
+                _dogs.postValue(textString)
+            }
         }
-
-        // get latest data dogs from local db
-        val loadFromDatabase = repository.loadDogs()
-        _dogs.postValue(loadFromDatabase)
-        view?.hideLoading()
     }
+}
+
+private fun <T> MutableLiveData<T>.postValue(textString: String) {
+
 }

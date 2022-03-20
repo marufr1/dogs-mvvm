@@ -15,7 +15,7 @@ import net.dogs.data.local.DogsDatabase
 import net.dogs.databinding.ActivityPicturesBinding
 import net.dogs.dialog.CustomLoadingDialog
 
-class PicturesActivity : AppCompatActivity(), PicturesView {
+class PicturesActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityPicturesBinding
     private lateinit var viewModel: PicturesViewModel

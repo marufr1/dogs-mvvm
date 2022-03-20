@@ -1,4 +1,8 @@
 package net.dogs.data.model
 
+import com.google.gson.annotations.SerializedName
 
-class SearchResponse : ArrayList<SearchResponseItem>()
+class SearchResponse(
+    @SerializedName("data")
+    val searchResponseItem: ArrayList<SearchResponseItem>
+)
