@@ -1,61 +1,56 @@
 package net.dogs.data
 
-import android.content.Context
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
+import com.skydoves.sandwich.message
+import com.skydoves.sandwich.onError
+import com.skydoves.sandwich.onException
+import com.skydoves.sandwich.suspendOnSuccess
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.onCompletion
+import kotlinx.coroutines.flow.onStart
 import net.dogs.data.local.Dog
-import net.dogs.data.local.DogsDatabase
-import net.dogs.data.model.SearchResponse
-import net.dogs.data.network.ApiClient
+import net.dogs.data.local.DogDao
+import net.dogs.data.network.ApiService
+import javax.inject.Inject
 
-class DogRepository(context: Context) {
+class DogRepository @Inject constructor(
+    private val apiService: ApiService,
+    private val dogDao: DogDao,
+    private val ioDispatcher: CoroutineDispatcher
+) {
 
-    private val retrofit = ApiClient.instance
-    private val database = DogsDatabase.getInstance(context)
+    suspend fun getDogs(
+        onStart: () -> Unit,
+        onComplete: () -> Unit,
+        onError: (String?) -> Unit
+    ) = flow<List<Dog>> {
+        val dogs = dogDao.getDog()
 
-    suspend fun getDogs(): SearchResponse? {
-
-        var response: SearchResponse?
-
-        withContext(CoroutineScope(Dispatchers.IO).coroutineContext) {
-            response = try {
-                retrofit.searchImages(size = "small", hasBreeds = true, limit = 5).body()
-            } catch (e: Exception) {
-                null
+        if (dogs.isEmpty()) {
+            val response = apiService.searchImages()
+            response.suspendOnSuccess {
+                val dogsConvert = data.searchResponseItem.map {
+                    Dog(
+                        null,
+                        it.id,
+                        it.url,
+                        it.breeds.elementAt(0).name,
+                        it.breeds.elementAt(0).bredFor
+                    )
+                }
+                dogDao.insertDog(dogsConvert)
+                emit(dogsConvert)
+            }.onError {
+                onError(this.message().toString())
+            }.onException {
+                onError(message)
             }
+        } else {
+            emit(dogDao.getDog())
         }
-        return response
     }
-
-    suspend fun saveDogs(searchResponse: SearchResponse): Boolean {
-        var successInsert: Boolean
-        withContext(CoroutineScope(Dispatchers.IO).coroutineContext) {
-            val dogs = searchResponse.map {
-                Dog(
-                    null,
-                    it.id,
-                    it.url,
-                    it.breeds.elementAt(0).name,
-                    it.breeds.elementAt(0).bredFor
-                )
-            }
-            successInsert = try {
-                database!!.dog().insertDog(dogs)
-                true
-            } catch (e: Exception) {
-                false
-            }
-        }
-        return successInsert
-    }
-
-    suspend fun loadDogs(): List<Dog> {
-        var result: List<Dog>
-        withContext(CoroutineScope(Dispatchers.IO).coroutineContext) {
-            result = database!!.dog().getDog()
-        }
-        return result
-    }
-
+        .onStart { onStart() }
+        .onCompletion { onComplete() }
+        .flowOn(ioDispatcher)
 }

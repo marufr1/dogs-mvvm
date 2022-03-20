@@ -1,5 +1,6 @@
 package net.dogs.data.network
 
+import com.skydoves.sandwich.ApiResponse
 import net.dogs.data.model.SearchResponse
 import retrofit2.Response
 import retrofit2.http.GET
@@ -16,6 +17,6 @@ interface ApiService {
         @Query("order") order: String? = null,              // RANDOM, ASC, DESC
         @Query("page") page: Int? = null,
         @Query("limit") limit: Int? = null,
-    ): Response<SearchResponse>
+    ): ApiResponse<SearchResponse>
 
 }
