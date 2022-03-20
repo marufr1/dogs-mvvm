@@ -32,15 +32,9 @@ class PicturesViewModel @Inject constructor(
                 onComplete = { _loading.postValue(false) },
                 onError = { _message.postValue(it) }
             ).collect {
-                val textString = it
-                    .joinToString(separator = ":")
-                    .substring(0, 100)
-                _dogs.postValue(textString)
+                val result = it
+                _dogs.postValue(result)
             }
         }
     }
-}
-
-private fun <T> MutableLiveData<T>.postValue(textString: String) {
-
 }

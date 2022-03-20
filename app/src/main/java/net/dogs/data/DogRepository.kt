@@ -24,7 +24,7 @@ class DogRepository @Inject constructor(
         onStart: () -> Unit,
         onComplete: () -> Unit,
         onError: (String?) -> Unit
-    ) = flow<List<Dog>> {
+    ) = flow {
         val dogs = dogDao.getDog()
 
         if (dogs.isEmpty()) {
@@ -42,7 +42,7 @@ class DogRepository @Inject constructor(
                 dogDao.insertDog(dogsConvert)
                 emit(dogsConvert)
             }.onError {
-                onError(this.message().toString())
+                onError(this.message())
             }.onException {
                 onError(message)
             }
