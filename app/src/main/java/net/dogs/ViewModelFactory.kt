@@ -7,7 +7,6 @@ import net.dogs.data.DogRepository
 class ViewModelFactory(
     private val repository: DogRepository
 ) : ViewModelProvider.NewInstanceFactory() {
-
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         try {
             return modelClass.getDeclaredConstructor(
@@ -17,5 +16,4 @@ class ViewModelFactory(
             throw IllegalArgumentException("Unknown ViewModel class: " + modelClass.name)
         }
     }
-
 }
