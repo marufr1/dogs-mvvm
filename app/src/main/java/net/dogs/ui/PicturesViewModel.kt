@@ -16,7 +16,7 @@ import javax.inject.Inject
 class PicturesViewModel @Inject constructor(
     private val repository: DogRepository,
     private val ioDispatcher: CoroutineDispatcher
-    ) : ViewModel() {
+) : ViewModel() {
 
     private val _dogs = MutableLiveData<List<Dog>>()
     val dogs: LiveData<List<Dog>> = _dogs

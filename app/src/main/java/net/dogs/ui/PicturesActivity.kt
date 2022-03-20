@@ -1,6 +1,7 @@
 package net.dogs.ui
 
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -9,7 +10,6 @@ import androidx.recyclerview.widget.GridLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import net.dogs.data.adapter.PicturesAdapter
-import net.dogs.data.local.DogsDatabase
 import net.dogs.databinding.ActivityPicturesBinding
 import net.dogs.dialog.CustomLoadingDialog
 
